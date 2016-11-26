@@ -1,0 +1,33 @@
+group "xyz.jadonfowler"
+version "0.0.0"
+
+buildscript {
+    ext.kotlin_version = "1.0.5"
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+apply plugin: "antlr"
+apply plugin: "kotlin"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    antlr "org.antlr:antlr4:4.5"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+}
+
+generateGrammarSource {
+    maxHeapSize = "64m"
+    arguments += ["-visitor", "-package", "xyz.jadonfowler.jml.parser"]
+    outputDirectory = new File("src/main/java/xyz/jadonfowler/jml/parser/".toString())
+}
+
+compileKotlin.dependsOn generateGrammarSource
